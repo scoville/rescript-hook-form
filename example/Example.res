@@ -82,7 +82,7 @@ module Form = {
       <button type_="button" onClick={_event => setValue(. "firstName", "foo")}>
         {"Set value"->React.string}
       </button>
-      <button type_="button" onClick={_event => reset(.)}> {"Reset"->React.string} </button>
+      <button type_="button" onClick={_event => reset()}> {"Reset"->React.string} </button>
       <button type_="button" onClick={_event => setFocus(. "firstName")}>
         {"Set focus"->React.string}
       </button>
