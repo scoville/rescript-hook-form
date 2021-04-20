@@ -35,6 +35,7 @@ module Form = {
     setValue: (. string, string) => unit,
     clearErrors: (. string) => unit,
     setError: (. string, Error.t) => unit,
+    reset: (. unit) => unit,
   }
 
   @ocaml.doc("Bindings for the [useForm](https://react-hook-form.com/api/useform) hook.")

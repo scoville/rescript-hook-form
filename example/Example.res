@@ -1,7 +1,7 @@
 module Form = {
   @react.component
   let make = () => {
-    let {control, formState: {errors}, handleSubmit, setFocus, setValue} = Hooks.Form.use(
+    let {control, formState: {errors}, handleSubmit, reset, setFocus, setValue} = Hooks.Form.use(
       ~option=Hooks.Form.option(
         ~mode=#onSubmit,
         ~defaultValues=Js.Dict.fromArray([
@@ -82,6 +82,7 @@ module Form = {
       <button type_="button" onClick={_event => setValue(. "firstName", "foo")}>
         {"Set value"->React.string}
       </button>
+      <button type_="button" onClick={_event => reset(.)}> {"Reset"->React.string} </button>
       <button type_="button" onClick={_event => setFocus(. "firstName")}>
         {"Set focus"->React.string}
       </button>
