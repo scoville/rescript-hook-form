@@ -1,7 +1,15 @@
 module Form = {
   @react.component
   let make = () => {
-    let {control, formState: {errors}, handleSubmit, reset, setFocus, setValue} = Hooks.Form.use(
+    let {
+      control,
+      formState: {errors},
+      handleSubmit,
+      reset,
+      setFocus,
+      setValue,
+      getValues,
+    } = Hooks.Form.use(
       ~option=Hooks.Form.option(
         ~mode=#onSubmit,
         ~defaultValues=Js.Dict.fromArray([
@@ -14,6 +22,8 @@ module Form = {
       ),
       (),
     )
+
+    let (isShow, setIsShow) = React.useState(() => false)
 
     let {fields, append} = Hooks.ArrayField.use(
       ~option=Hooks.ArrayField.option(~control, ~name="hobbies", ()),
@@ -61,18 +71,20 @@ module Form = {
       {fields
       ->Js.Array2.mapi((field, index) =>
         <div key={field["id"]}>
-          <Controller
-            name={Values.hobby(index)}
-            control
-            defaultValue={Value.make(field["name"])}
-            rules={Rules.make(~required=true, ())}
-            render={({field: {name, onBlur, onChange, ref, value}}) =>
-              <div>
-                <label> {name->React.string} </label>
-                <input name onBlur onChange ref value />
-                <ErrorMessage errors name message={"Required"->React.string} />
-              </div>}
-          />
+          {isShow
+            ? <Controller
+                name={Values.hobby(index)}
+                control
+                defaultValue={Value.make(field["name"])}
+                rules={Rules.make(~required=true, ())}
+                render={({field: {name, onBlur, onChange, ref, value}}) =>
+                  <div>
+                    <label> {name->React.string} </label>
+                    <input name onBlur onChange ref value />
+                    <ErrorMessage errors name message={"Required"->React.string} />
+                  </div>}
+              />
+            : React.null}
         </div>
       )
       ->React.array}
@@ -87,6 +99,22 @@ module Form = {
         {"Set focus"->React.string}
       </button>
       <input type_="submit" />
+      <div>
+        <button type_="button" onClick={_event => setIsShow(_ => true)}>
+          {"show Hobbies"->React.string}
+        </button>
+        <button type_="button" onClick={_event => setIsShow(_ => false)}>
+          {"hide Hobbies without saving current changes"->React.string}
+        </button>
+        <button
+          type_="button"
+          onClick={_event => {
+            setIsShow(_ => false)
+            setValue(. "hobbies", getValues(~fieldName="hobbies"))
+          }}>
+          {"hide Hobbies and saved the last data"->React.string}
+        </button>
+      </div>
     </form>
   }
 }
