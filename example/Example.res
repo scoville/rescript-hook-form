@@ -8,18 +8,16 @@ module Form = {
           (Values.firstName, Value.make("")),
           (Values.lastName, Value.make("")),
           (Values.acceptTerms, Value.make(false)),
-          (Values.hobbies, Value.make([{"name": ""}])),
+          (Values.hobbies, Value.make([{"id": Uuid.v4(), "name": ""}])),
         ]),
         (),
       ),
       (),
     )
 
-    let hobbies = Hooks.WatchValues.use(
+    let hobbies: array<Values.Hobby.t> = Hooks.WatchValues.use(
       ~option=Hooks.WatchValues.option(~control, ~name="hobbies", ()),
     )
-
-    Js.log(hobbies)
 
     let {fields, append} = Hooks.ArrayField.use(
       ~option=Hooks.ArrayField.option(~control, ~name="hobbies", ()),
@@ -66,7 +64,7 @@ module Form = {
       />
       {fields
       ->Js.Array2.mapi((field, index) =>
-        <div key={Obj.magic(field)["id"]}>
+        <div key={field["id"]}>
           <Controller
             name={Values.hobby(index)}
             control
@@ -82,7 +80,7 @@ module Form = {
         </div>
       )
       ->React.array}
-      <button type_="button" onClick={_event => append(. {"name": ""})}>
+      <button type_="button" onClick={_event => append(. {"id": Uuid.v4(), "name": ""})}>
         {"Add hobby"->React.string}
       </button>
       <button type_="button" onClick={_event => setValue(. "firstName", "foo")}>
@@ -93,6 +91,10 @@ module Form = {
         {"Set focus"->React.string}
       </button>
       <input type_="submit" />
+      <div>
+        {"My hobbies: "->React.string}
+        {hobbies->Js.Array2.map(({name}) => name)->Js.Array2.joinWith(", ")->React.string}
+      </div>
     </form>
   }
 }

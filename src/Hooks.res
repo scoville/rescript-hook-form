@@ -73,9 +73,7 @@ module ArrayField = {
 }
 
 module WatchValues = {
-  type t
-
-  @ocaml.doc("Option builder for the [useWatch](https://react-hook-form.com/api/useWatch) hook.")
+  @ocaml.doc("Option builder for the [useWatch](https://react-hook-form.com/api/usewatch) hook.")
   @deriving({abstract: light})
   type option = {
     name: string,
@@ -84,7 +82,7 @@ module WatchValues = {
     defaultValue: Value.t,
   }
 
-  @ocaml.doc("Bindings for the [useWatch](https://react-hook-form.com/api/useWatch) hook.")
+  @ocaml.doc("Bindings for the [useWatch](https://react-hook-form.com/api/usewatch) hook.")
   @module("react-hook-form")
-  external use: (~option: option) => t = "useWatch"
+  external use: (~option: option) => 'a = "useWatch"
 }
