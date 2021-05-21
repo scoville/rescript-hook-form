@@ -71,3 +71,20 @@ module ArrayField = {
   @module("react-hook-form")
   external use: (~option: option) => t<'data> = "useFieldArray"
 }
+
+module WatchValues = {
+  type t
+
+  @ocaml.doc("Option builder for the [useWatch](https://react-hook-form.com/api/useWatch) hook.")
+  @deriving({abstract: light})
+  type option = {
+    name: string,
+    control: Control.t,
+    @optional
+    defaultValue: Value.t,
+  }
+
+  @ocaml.doc("Bindings for the [useWatch](https://react-hook-form.com/api/useWatch) hook.")
+  @module("react-hook-form")
+  external use: (~option: option) => t = "useWatch"
+}

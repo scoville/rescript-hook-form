@@ -15,6 +15,12 @@ module Form = {
       (),
     )
 
+    let hobbies = Hooks.WatchValues.use(
+      ~option=Hooks.WatchValues.option(~control, ~name="hobbies", ()),
+    )
+
+    Js.log(hobbies)
+
     let {fields, append} = Hooks.ArrayField.use(
       ~option=Hooks.ArrayField.option(~control, ~name="hobbies", ()),
     )
