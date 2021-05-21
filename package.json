@@ -12,11 +12,18 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@hookform/error-message": "^2.0.0",
+    "@rescript/react": "^0.10.3",
     "bs-platform": "^9.0.2",
     "parcel-bundler": "^1.12.5",
-    "rescript": "^9.1.0"
+    "re-code": "https://github.com/scoville/re-code",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-hook-form": "^7.6.4",
+    "rescript": "^9.1.2",
+    "uuid": "^8.3.2"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@hookform/error-message": "^2.0.0",
     "@rescript/react": "^0.10.2",
     "re-code": "https://github.com/scoville/re-code",

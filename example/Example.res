@@ -8,7 +8,7 @@ module Form = {
           (Values.firstName, Value.make("")),
           (Values.lastName, Value.make("")),
           (Values.acceptTerms, Value.make(false)),
-          (Values.hobbies, Value.make([{"name": ""}])),
+          (Values.hobbies, Value.make([{"id": Uuid.v4(), "name": ""}])),
         ]),
         (),
       ),
@@ -60,7 +60,7 @@ module Form = {
       />
       {fields
       ->Js.Array2.mapi((field, index) =>
-        <div key={Obj.magic(field)["id"]}>
+        <div key={field["id"]}>
           <Controller
             name={Values.hobby(index)}
             control
@@ -76,7 +76,7 @@ module Form = {
         </div>
       )
       ->React.array}
-      <button type_="button" onClick={_event => append(. {"name": ""})}>
+      <button type_="button" onClick={_event => append(. {"id": Uuid.v4(), "name": ""})}>
         {"Add hobby"->React.string}
       </button>
       <button type_="button" onClick={_event => setValue(. "firstName", "foo")}>
