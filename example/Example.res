@@ -12,12 +12,24 @@ module Form = {
     } = Hooks.Form.use(.
       ~config=Hooks.Form.config(
         ~mode=#onSubmit,
-        ~defaultValues=Js.Dict.fromArray([
-          (Values.firstName, Value.make("")),
-          (Values.lastName, Value.make("")),
-          (Values.acceptTerms, Value.make(false)),
-          (Values.hobbies, Value.make([{"id": Uuid.v4(), "name": ""}])),
-        ]),
+        ~defaultValues=Js.Json.object_(
+          Js.Dict.fromArray([
+            (Values.firstName, Js.Json.string("")),
+            (Values.lastName, Js.Json.string("")),
+            (Values.acceptTerms, Js.Json.boolean(false)),
+            (
+              Values.hobbies,
+              Js.Json.array([
+                Js.Json.object_(
+                  Js.Dict.fromArray([
+                    ("id", Js.Json.string(Uuid.v4())),
+                    (Values.Hobby.name, Js.Json.string("")),
+                  ]),
+                ),
+              ]),
+            ),
+          ]),
+        ),
         (),
       ),
       (),
@@ -81,7 +93,7 @@ module Form = {
               <Controller
                 name={Values.hobby(index)}
                 control
-                defaultValue={Value.make(field["name"])}
+                defaultValue={Js.Json.string(field["name"])}
                 rules={Rules.make(~required=true, ())}
                 render={({field: {name, onBlur, onChange, ref, value}}) =>
                   <div>
