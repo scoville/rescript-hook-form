@@ -19,6 +19,10 @@ module Form = {
       ~option=Hooks.ArrayField.option(~control, ~name="hobbies", ()),
     )
 
+    let hobbies = Hooks.WatchValues.use(
+      ~option=Hooks.WatchValues.option(~control, ~name="hobbies", ()),
+    )
+
     let onSubmit = (data, _event) =>
       switch data->ReCode.Decode.decodeJson(Values.decoder) {
       | Ok(value) => Js.log2("ok", value)
@@ -76,6 +80,14 @@ module Form = {
         </div>
       )
       ->React.array}
+      <div>
+        {"My hobbies: "->React.string}
+        {switch hobbies->ReCode.Decode.decodeJson(ReCode.Decode.array(Values.Hobby.decoder)) {
+        | Ok(hobbies) =>
+          hobbies->Js.Array2.map(({name}) => name)->Js.Array2.joinWith(", ")->React.string
+        | Error(_) => React.null
+        }}
+      </div>
       <button type_="button" onClick={_event => append(. {"id": Uuid.v4(), "name": ""})}>
         {"Add hobby"->React.string}
       </button>

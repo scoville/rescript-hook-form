@@ -8,7 +8,7 @@ module Hobby = {
 
   let make = name => {name: name}
 
-  let decoder = pure(make)->Object.required(name, string)
+  let decoder = pure(make)->Object.required(name, string->String.required)
 }
 
 type t = {firstName: string, lastName: string, acceptTerms: bool, hobbies: array<Hobby.t>}
