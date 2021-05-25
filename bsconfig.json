@@ -20,5 +20,9 @@
   "suffix": ".js",
   "namespace": true,
   "bs-dependencies": ["@rescript/react"],
-  "bs-dev-dependencies": ["re-code"]
+  "bs-dev-dependencies": ["re-code"],
+  "warnings": {
+    "number": "-48-30",
+    "error": "+A+8+11+12+16+26+27+31+32+33+34+35+39+44+45+101+102+104+105"
+  }
 }

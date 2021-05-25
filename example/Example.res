@@ -1,8 +1,16 @@
 module Form = {
   @react.component
   let make = () => {
-    let {control, formState: {errors}, handleSubmit, reset, setFocus, setValue} = Hooks.Form.use(
-      ~option=Hooks.Form.option(
+    let {
+      control,
+      formState: {errors},
+      getValues,
+      handleSubmit,
+      reset,
+      setFocus,
+      setValue,
+    } = Hooks.Form.use(.
+      ~config=Hooks.Form.config(
         ~mode=#onSubmit,
         ~defaultValues=Js.Dict.fromArray([
           (Values.firstName, Value.make("")),
@@ -15,8 +23,16 @@ module Form = {
       (),
     )
 
-    let {fields, append} = Hooks.ArrayField.use(
-      ~option=Hooks.ArrayField.option(~control, ~name="hobbies", ()),
+    let (hobbiesAreShown, setHobbiesAreShown) = React.useState(() => false)
+
+    let {fields, append} = Hooks.ArrayField.use(.
+      ~config=Hooks.ArrayField.config(~control, ~name="hobbies", ()),
+      (),
+    )
+
+    let hobbies = Hooks.WatchValues.use(.
+      ~config=Hooks.WatchValues.config(~control, ~name="hobbies", ()),
+      (),
     )
 
     let onSubmit = (data, _event) =>
@@ -58,33 +74,66 @@ module Form = {
           </div>
         }}
       />
-      {fields
-      ->Js.Array2.mapi((field, index) =>
-        <div key={field["id"]}>
-          <Controller
-            name={Values.hobby(index)}
-            control
-            defaultValue={Value.make(field["name"])}
-            rules={Rules.make(~required=true, ())}
-            render={({field: {name, onBlur, onChange, ref, value}}) =>
-              <div>
-                <label> {name->React.string} </label>
-                <input name onBlur onChange ref value />
-                <ErrorMessage errors name message={"Required"->React.string} />
-              </div>}
-          />
-        </div>
-      )
-      ->React.array}
+      {hobbiesAreShown
+        ? fields
+          ->Js.Array2.mapi((field, index) =>
+            <div key={field["id"]}>
+              <Controller
+                name={Values.hobby(index)}
+                control
+                defaultValue={Value.make(field["name"])}
+                rules={Rules.make(~required=true, ())}
+                render={({field: {name, onBlur, onChange, ref, value}}) =>
+                  <div>
+                    <label> {name->React.string} </label>
+                    <input name onBlur onChange ref value />
+                    <ErrorMessage errors name message={"Required"->React.string} />
+                  </div>}
+              />
+            </div>
+          )
+          ->React.array
+        : React.null}
+      {hobbiesAreShown
+        ? <div>
+            {"Hobbies: "->React.string}
+            {switch hobbies->ReCode.Decode.decodeJson(ReCode.Decode.array(Values.Hobby.decoder)) {
+            | Ok(hobbies) =>
+              hobbies->Js.Array2.map(({name}) => name)->Js.Array2.joinWith(", ")->React.string
+            | Error(_) => React.null
+            }}
+          </div>
+        : React.null}
       <button type_="button" onClick={_event => append(. {"id": Uuid.v4(), "name": ""})}>
         {"Add hobby"->React.string}
       </button>
-      <button type_="button" onClick={_event => setValue(. "firstName", "foo")}>
+      <button type_="button" onClick={_event => setValue(. "firstName", Js.Json.string("foo"))}>
         {"Set value"->React.string}
       </button>
-      <button type_="button" onClick={_event => reset()}> {"Reset"->React.string} </button>
+      <button type_="button" onClick={_event => reset(. None)}> {"Reset"->React.string} </button>
       <button type_="button" onClick={_event => setFocus(. "firstName")}>
         {"Set focus"->React.string}
+      </button>
+      <button
+        type_="button"
+        onClick={_event => {
+          if hobbiesAreShown {
+            switch getValues(. None)->ReCode.Decode.decodeJson(Values.decoder) {
+            | Ok({hobbies}) =>
+              setValue(.
+                "hobbies",
+                Js.Json.stringifyAny(hobbies)->Belt.Option.mapWithDefault(
+                  Js.Json.array([]),
+                  Js.Json.parseExn,
+                ),
+              )
+            | Error(error) => Js.log(error)
+            }
+          }
+
+          setHobbiesAreShown(not)
+        }}>
+        {`${hobbiesAreShown ? "Hide" : "Show"} hobbies`->React.string}
       </button>
       <input type_="submit" />
     </form>

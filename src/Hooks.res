@@ -5,69 +5,85 @@ module Form = {
     errors: Js.Dict.t<Error.t>,
     isDirty: bool,
     isSubmitted: bool,
-    isSubmitSuccessful: bool,
     isSubmitting: bool,
-    submitCount: int,
+    isSubmitSuccessful: bool,
     isValid: bool,
     isValidating: bool,
+    submitCount: int,
   }
 
-  @ocaml.doc("Option builder for the [useForm](https://react-hook-form.com/api/useform) hook.")
+  @ocaml.doc("Config builder for the [useForm](https://react-hook-form.com/api/useform) hook.")
   @deriving({abstract: light})
-  type option = {
+  type config = {
+    @optional
+    criteriaMode: [#firstError | #all],
+    @optional
+    defaultValues: Js.Dict.t<Value.t>,
     @optional
     mode: [#onSubmit | #onBlur | #onChange | #onTouched | #all],
     @optional
     reValidateMode: [#onSubmit | #onBlur | #onChange],
     @optional
-    defaultValues: Js.Dict.t<Value.t>,
-    @optional
-    criteriaMode: [#firstError | #all],
-    @optional
     shouldFocusError: bool,
   }
 
   type t = {
-    control: Control.t,
-    handleSubmit: (. (@uncurry Js.Json.t, ReactEvent.Form.t) => unit) => onSubmit,
-    formState: formState,
-    setFocus: (. string) => unit,
-    setValue: (. string, string) => unit,
     clearErrors: (. string) => unit,
+    control: Control.t,
+    formState: formState,
+    getValues: (. option<string>) => Js.Json.t,
+    handleSubmit: (. (@uncurry Js.Json.t, ReactEvent.Form.t) => unit) => onSubmit,
+    reset: (. option<Js.Json.t>) => unit,
     setError: (. string, Error.t) => unit,
-    reset: (~defaultValues: Js.Dict.t<Value.t>=?, unit) => unit,
+    setFocus: (. string) => unit,
+    setValue: (. string, Js.Json.t) => unit,
   }
 
   @ocaml.doc("Bindings for the [useForm](https://react-hook-form.com/api/useform) hook.")
   @module("react-hook-form")
-  external use: (~option: option=?, unit) => t = "useForm"
+  external use: (. ~config: config=?, unit) => t = "useForm"
 }
 
 module ArrayField = {
-  type t<'data> = {
-    fields: array<'data>,
-    append: (. 'data) => unit,
-    prepend: (. 'data) => unit,
-    insert: (. int, 'data) => unit,
+  type t<'value> = {
+    append: (. 'value) => unit,
+    fields: array<'value>,
+    insert: (. int, 'value) => unit,
+    move: (. int, int) => unit,
+    prepend: (. 'value) => unit,
     remove: (. int) => unit,
     swap: (. int, int) => unit,
-    move: (. int, int) => unit,
   }
 
   @ocaml.doc(
-    "Option builder for the [useFieldArray](https://react-hook-form.com/api/usefieldarray) hook."
+    "Config builder for the [useFieldArray](https://react-hook-form.com/api/usefieldarray) hook."
   )
   @deriving({abstract: light})
-  type option = {
-    name: string,
+  type config = {
     control: Control.t,
     @optional
     keyName: string,
+    name: string,
   }
 
   @ocaml.doc(
     "Bindings for the [useFieldArray](https://react-hook-form.com/api/usefieldarray) hook."
   )
   @module("react-hook-form")
-  external use: (~option: option) => t<'data> = "useFieldArray"
+  external use: (. ~config: config=?, unit) => t<'value> = "useFieldArray"
+}
+
+module WatchValues = {
+  @ocaml.doc("Config builder for the [useWatch](https://react-hook-form.com/api/usewatch) hook.")
+  @deriving({abstract: light})
+  type config = {
+    @optional
+    defaultValue: Value.t,
+    control: Control.t,
+    name: string,
+  }
+
+  @ocaml.doc("Bindings for the [useWatch](https://react-hook-form.com/api/usewatch) hook.")
+  @module("react-hook-form")
+  external use: (. ~config: config=?, unit) => Js.Json.t = "useWatch"
 }
