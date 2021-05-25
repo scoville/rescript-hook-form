@@ -12,24 +12,12 @@ module Form = {
     } = Hooks.Form.use(.
       ~config=Hooks.Form.config(
         ~mode=#onSubmit,
-        ~defaultValues=Js.Json.object_(
-          Js.Dict.fromArray([
-            (Values.firstName, Js.Json.string("")),
-            (Values.lastName, Js.Json.string("")),
-            (Values.acceptTerms, Js.Json.boolean(false)),
-            (
-              Values.hobbies,
-              Js.Json.array([
-                Js.Json.object_(
-                  Js.Dict.fromArray([
-                    ("id", Js.Json.string(Uuid.v4())),
-                    (Values.Hobby.name, Js.Json.string("")),
-                  ]),
-                ),
-              ]),
-            ),
-          ]),
-        ),
+        ~defaultValues=Values.encoder({
+          "firstName": "",
+          "lastName": "",
+          "acceptTerms": false,
+          "hobbies": [{"id": Uuid.v4(), "name": ""}],
+        }),
         (),
       ),
       (),
@@ -93,7 +81,7 @@ module Form = {
               <Controller
                 name={Values.hobby(index)}
                 control
-                defaultValue={Js.Json.string(field["name"])}
+                defaultValue={ReCode.Encode.string(field["name"])}
                 rules={Rules.make(~required=true, ())}
                 render={({field: {name, onBlur, onChange, ref, value}}) =>
                   <div>
@@ -119,7 +107,8 @@ module Form = {
       <button type_="button" onClick={_event => append(. {"id": Uuid.v4(), "name": ""})}>
         {"Add hobby"->React.string}
       </button>
-      <button type_="button" onClick={_event => setValue(. "firstName", Js.Json.string("foo"))}>
+      <button
+        type_="button" onClick={_event => setValue(. "firstName", ReCode.Encode.string("foo"))}>
         {"Set value"->React.string}
       </button>
       <button type_="button" onClick={_event => reset(. None)}> {"Reset"->React.string} </button>
@@ -130,16 +119,11 @@ module Form = {
         type_="button"
         onClick={_event => {
           if hobbiesAreShown {
-            switch getValues(. None)->ReCode.Decode.decodeJson(Values.decoder) {
-            | Ok({hobbies}) =>
-              setValue(.
-                "hobbies",
-                Js.Json.stringifyAny(hobbies)->Belt.Option.mapWithDefault(
-                  Js.Json.array([]),
-                  Js.Json.parseExn,
-                ),
-              )
-            | Error(error) => Js.log(error)
+            switch getValues(. None)->ReCode.Decode.decodeJson(
+              ReCode.Decode.field("hobbies", ReCode.Decode.raw),
+            ) {
+            | Ok(hobbies) => setValue(. "hobbies", hobbies)
+            | Error(_) => ignore()
             }
           }
 
