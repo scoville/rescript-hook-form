@@ -27,6 +27,6 @@ external make: (
   ~name: string,
   ~control: Control.t,
   ~render: render => React.element,
-  ~defaultValue: Value.t=?,
+  ~defaultValue: Js.Json.t=?,
   ~rules: Rules.t=?,
 ) => React.element = "Controller"

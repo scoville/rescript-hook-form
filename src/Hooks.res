@@ -18,7 +18,7 @@ module Form = {
     @optional
     criteriaMode: [#firstError | #all],
     @optional
-    defaultValues: Js.Dict.t<Value.t>,
+    defaultValues: Js.Json.t,
     @optional
     mode: [#onSubmit | #onBlur | #onChange | #onTouched | #all],
     @optional
@@ -78,7 +78,7 @@ module WatchValues = {
   @deriving({abstract: light})
   type config = {
     @optional
-    defaultValue: Value.t,
+    defaultValue: Js.Json.t,
     control: Control.t,
     name: string,
   }

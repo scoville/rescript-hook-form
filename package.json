@@ -26,7 +26,6 @@
   "peerDependencies": {
     "@hookform/error-message": "^2.0.0",
     "@rescript/react": "^0.10.2",
-    "re-code": "https://github.com/scoville/re-code",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.1.1"

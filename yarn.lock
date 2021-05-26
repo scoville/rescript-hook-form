@@ -4254,7 +4254,7 @@ range-parser@~1.2.1:
 
 "re-code@https://github.com/scoville/re-code":
   version "1.0.0"
-  resolved "https://github.com/scoville/re-code#01211c0a04531acad7894156ae94c3d16af7c392"
+  resolved "https://github.com/scoville/re-code#7e6e6ae3f692b8c79c1c458803dd56e629217aa5"
 
 react-dom@^17.0.2:
   version "17.0.2"
