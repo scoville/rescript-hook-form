@@ -13,6 +13,7 @@ module Form = {
       ~config=Hooks.Form.config(
         ~mode=#onSubmit,
         ~defaultValues=Values.encoder({
+          "email": "",
           "firstName": "",
           "lastName": "",
           "acceptTerms": false,
@@ -42,6 +43,36 @@ module Form = {
       }
 
     <form onSubmit={handleSubmit(. onSubmit)}>
+      <Controller
+        name=Values.email
+        control
+        rules={Rules.make(
+          ~required=true,
+          ~validate=Js.Dict.fromArray([
+            ("validEmail", Validation.sync(value => value->String.contains('@'))),
+            ("validLength", Validation.sync(value => value->String.length >= 8)),
+          ]),
+          (),
+        )}
+        render={({field: {name, onBlur, onChange, ref, value}}) =>
+          <div>
+            <label> {name->React.string} </label>
+            <input name onBlur onChange ref value />
+            <span>
+              {errors
+              ->Error.get("email")
+              ->Belt.Option.mapWithDefault("", error =>
+                switch error.type_ {
+                | "required" => "Required"
+                | "validEmail" => "invalid email, email needs to have @"
+                | "validLength" => "invalid email, email should have length >=8"
+                | _ => ""
+                }
+              )
+              ->React.string}
+            </span>
+          </div>}
+      />
       <Controller
         name=Values.firstName
         control

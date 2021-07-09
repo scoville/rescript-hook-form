@@ -1,7 +1,3 @@
-module Validation = {
-  type t = Sync(string => bool) | Async(string => Js.Promise.t<bool>)
-}
-
 @deriving({abstract: light})
 type t = {
   @optional
