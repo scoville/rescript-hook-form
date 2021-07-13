@@ -25,7 +25,7 @@ module Form = {
 
     let (hobbiesAreShown, setHobbiesAreShown) = React.useState(() => false)
 
-    let {fields, append} = Hooks.ArrayField.use(.
+    let {fields, append, update} = Hooks.ArrayField.use(.
       ~config=Hooks.ArrayField.config(~control, ~name="hobbies", ()),
       (),
     )
@@ -88,6 +88,20 @@ module Form = {
                     <label> {name->React.string} </label>
                     <input name onBlur onChange ref value />
                     <ErrorMessage errors name message={"Required"->React.string} />
+                    <button
+                      type_="button"
+                      onClick={_event =>
+                        update(.
+                          index,
+                          {
+                            "id": field["id"],
+                            "name": ["Game", "Food", "Sport", "Traveling", "Movie"][
+                              Js.Math.random_int(0, 5)
+                            ],
+                          },
+                        )}>
+                      {"Update with random hobby"->React.string}
+                    </button>
                   </div>}
               />
             </div>
