@@ -53,6 +53,7 @@ module ArrayField = {
     prepend: (. 'value) => unit,
     remove: (. int) => unit,
     swap: (. int, int) => unit,
+    update: (. int, 'value) => unit,
   }
 
   @ocaml.doc(
