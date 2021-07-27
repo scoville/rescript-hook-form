@@ -21,15 +21,23 @@ module Hobby = {
   }
 }
 
-type t = {firstName: string, lastName: string, acceptTerms: bool, hobbies: array<Hobby.t>}
+type t = {
+  email: string,
+  firstName: string,
+  lastName: string,
+  acceptTerms: bool,
+  hobbies: array<Hobby.t>,
+}
 
+let email = "email"
 let firstName = "firstName"
 let lastName = "lastName"
 let acceptTerms = "acceptTerms"
 let hobbies = "hobbies"
 let hobby = index => `${hobbies}.${index->Belt.Int.toString}.${Hobby.name}`
 
-let make = (firstName, lastName, acceptTerms, hobbies) => {
+let make = (email, firstName, lastName, acceptTerms, hobbies) => {
+  email: email,
   firstName: firstName,
   lastName: lastName,
   acceptTerms: acceptTerms,
@@ -41,6 +49,7 @@ let decoder = {
   open ReCode.DecodeExtra
 
   pure(make)
+  ->Object.required(email, string)
   ->Object.required(firstName, string)
   ->Object.required(lastName, string)
   ->Object.required(acceptTerms, bool)
@@ -51,6 +60,7 @@ let encoder = values => {
   open ReCode.Encode
 
   object([
+    (email, string(values["email"])),
     (firstName, string(values["firstName"])),
     (lastName, string(values["lastName"])),
     (acceptTerms, bool(values["acceptTerms"])),
