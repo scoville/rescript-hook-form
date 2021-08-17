@@ -58,7 +58,11 @@ module Form = {
           <div>
             <label> {name->React.string} </label>
             <input
-              name onBlur={_event => onBlur()} onChange={Controller.handleEvent(onChange)} ref value
+              name
+              onBlur={_event => onBlur()}
+              onChange={event => onChange(Controller.OnChangeArg.event(event))}
+              ref
+              value
             />
             <span>
               {errors
@@ -83,7 +87,11 @@ module Form = {
           <div>
             <label> {name->React.string} </label>
             <input
-              name onBlur={_event => onBlur()} onChange={Controller.handleEvent(onChange)} ref value
+              name
+              onBlur={_event => onBlur()}
+              onChange={event => onChange(Controller.OnChangeArg.event(event))}
+              ref
+              value
             />
             <ErrorMessage errors name message={"Required"->React.string} />
           </div>}
@@ -96,7 +104,11 @@ module Form = {
           <div>
             <label> {name->React.string} </label>
             <input
-              name onBlur={_event => onBlur()} onChange={Controller.handleEvent(onChange)} ref value
+              name
+              onBlur={_event => onBlur()}
+              onChange={event => onChange(Controller.OnChangeArg.event(event))}
+              ref
+              value
             />
             <button
               type_="button"
@@ -122,7 +134,7 @@ module Form = {
             <input
               name
               onBlur={_event => onBlur()}
-              onChange={Controller.handleEvent(onChange)}
+              onChange={event => onChange(Controller.OnChangeArg.event(event))}
               ref
               value
               type_="checkbox"
@@ -145,7 +157,7 @@ module Form = {
                     <input
                       name
                       onBlur={_event => onBlur()}
-                      onChange={Controller.handleEvent(onChange)}
+                      onChange={event => onChange(Controller.OnChangeArg.event(event))}
                       ref
                       value
                     />

@@ -21,32 +21,6 @@ This function allows you to set the input value to any arbitrary value.")
   let value = valueHandler => Any(valueHandler)
 }
 
-@ocaml.doc("Simple helper that simplifies `onChange` argument handling when it's passed down to native inputs.
-
-_Has a small runtime cost._
-
-Example:
-
-```
-<Controller
-  render={({field: {onChange}}) =>
-    <input onChange={event => onChange(Controller.OnChangeArg.event(event))} />
-  }
-/>
-```
-
-Can be written:
-
-```
-<Controller
-  render={({field: {onChange}}) =>
-    <input onChange={Controller.handleEvent(onChange)} />
-  }
-/>
-```
-")
-let handleEvent = (onChange, event) => onChange(OnChangeArg.event(event))
-
 @ocaml.doc(
   "The `field` object described [here](https://react-hook-form.com/api/usecontroller/controller#main)."
 )
