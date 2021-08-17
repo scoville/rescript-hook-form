@@ -57,7 +57,9 @@ module Form = {
         render={({field: {name, onBlur, onChange, ref, value}}) =>
           <div>
             <label> {name->React.string} </label>
-            <input name onBlur onChange ref value />
+            <input
+              name onBlur={_event => onBlur()} onChange={Controller.handleEvent(onChange)} ref value
+            />
             <span>
               {errors
               ->Error.get("email")
@@ -80,7 +82,9 @@ module Form = {
         render={({field: {name, onBlur, onChange, ref, value}}) =>
           <div>
             <label> {name->React.string} </label>
-            <input name onBlur onChange ref value />
+            <input
+              name onBlur={_event => onBlur()} onChange={Controller.handleEvent(onChange)} ref value
+            />
             <ErrorMessage errors name message={"Required"->React.string} />
           </div>}
       />
@@ -91,7 +95,21 @@ module Form = {
         render={({field: {name, onBlur, onChange, ref, value}}) =>
           <div>
             <label> {name->React.string} </label>
-            <input name onBlur onChange ref value />
+            <input
+              name onBlur={_event => onBlur()} onChange={Controller.handleEvent(onChange)} ref value
+            />
+            <button
+              type_="button"
+              onClick={_event =>
+                onChange(
+                  Controller.OnChangeArg.value(
+                    Js.Json.string(
+                      value->Js.String2.split("")->Js.Array2.reverseInPlace->Js.Array2.joinWith(""),
+                    ),
+                  ),
+                )}>
+              {"Reverse"->React.string}
+            </button>
             <ErrorMessage errors name message={"Required"->React.string} />
           </div>}
       />
@@ -101,7 +119,14 @@ module Form = {
         render={({field: {name, onBlur, onChange, ref, value}}) => {
           <div>
             <label> {name->React.string} </label>
-            <input name onBlur onChange ref value type_="checkbox" />
+            <input
+              name
+              onBlur={_event => onBlur()}
+              onChange={Controller.handleEvent(onChange)}
+              ref
+              value
+              type_="checkbox"
+            />
           </div>
         }}
       />
@@ -117,7 +142,13 @@ module Form = {
                 render={({field: {name, onBlur, onChange, ref, value}}) =>
                   <div>
                     <label> {name->React.string} </label>
-                    <input name onBlur onChange ref value />
+                    <input
+                      name
+                      onBlur={_event => onBlur()}
+                      onChange={Controller.handleEvent(onChange)}
+                      ref
+                      value
+                    />
                     <ErrorMessage errors name message={"Required"->React.string} />
                     <button
                       type_="button"
