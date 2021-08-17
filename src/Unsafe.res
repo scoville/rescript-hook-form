@@ -13,3 +13,26 @@ to improve performances or quickly get the value out of a form.
 
 Use it with care.")
 external anyToJson: 'a => Js.Json.t = "%identity"
+
+@ocaml.doc("Can be useful when you want to pass the `value` argument received
+from a Controller's render function to a native input.
+
+Notice that such values can actually be of any (serializable) type so use with care.
+
+Example:
+
+```
+<Controller
+  render={({field: {value}}) =>
+    <input value={Unsafe.valueToString(value)} />
+  }
+/>
+```
+")
+external valueToString: Js.Json.t => string = "%identity"
+
+@ocaml.doc("Can be useful when you want to pass the `value` argument received
+from a Controller's render function to a native checkbox.
+
+Notice that such values can actually be of any (serializable) type so use with care.")
+external valueToBool: Js.Json.t => bool = "%identity"

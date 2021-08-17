@@ -3,7 +3,7 @@
 type rec t
 
 @ocaml.doc("Synchronous validation")
-let sync: (string => bool) => t
+let sync: (Js.Json.t => bool) => t
 
 @ocaml.doc("Asynchronous validation")
-let async: (string => Js.Promise.t<bool>) => t
+let async: (Js.Json.t => Js.Promise.t<bool>) => t

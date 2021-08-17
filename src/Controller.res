@@ -29,9 +29,7 @@ type field = {
   onBlur: unit => unit,
   onChange: OnChangeArg.t => unit,
   ref: ReactDOM.domRef,
-  // This is not correct, the value can be a bool or an int
-  // The value should be considered opaque and never access directly
-  value: string,
+  value: Js.Json.t,
 }
 
 @ocaml.doc(

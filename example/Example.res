@@ -49,8 +49,18 @@ module Form = {
         rules={Rules.make(
           ~required=true,
           ~validate=Js.Dict.fromArray([
-            ("validEmail", Validation.sync(value => value->String.contains('@'))),
-            ("validLength", Validation.sync(value => value->String.length >= 8)),
+            (
+              "validEmail",
+              Validation.sync(value =>
+                value->ReCode.Decode.string->Belt.Result.getWithDefault("")->String.contains('@')
+              ),
+            ),
+            (
+              "validLength",
+              Validation.sync(value =>
+                value->ReCode.Decode.string->Belt.Result.getWithDefault("")->String.length >= 8
+              ),
+            ),
           ]),
           (),
         )}
@@ -62,7 +72,7 @@ module Form = {
               onBlur={_event => onBlur()}
               onChange={event => onChange(Controller.OnChangeArg.event(event))}
               ref
-              value
+              value={value->ReCode.Decode.string->Belt.Result.getWithDefault("")}
             />
             <span>
               {errors
@@ -91,7 +101,7 @@ module Form = {
               onBlur={_event => onBlur()}
               onChange={event => onChange(Controller.OnChangeArg.event(event))}
               ref
-              value
+              value={value->ReCode.Decode.string->Belt.Result.getWithDefault("")}
             />
             <ErrorMessage errors name message={"Required"->React.string} />
           </div>}
@@ -108,16 +118,20 @@ module Form = {
               onBlur={_event => onBlur()}
               onChange={event => onChange(Controller.OnChangeArg.event(event))}
               ref
-              value
+              value={value->ReCode.Decode.string->Belt.Result.getWithDefault("")}
             />
             <button
               type_="button"
               onClick={_event =>
                 onChange(
                   Controller.OnChangeArg.value(
-                    Js.Json.string(
-                      value->Js.String2.split("")->Js.Array2.reverseInPlace->Js.Array2.joinWith(""),
-                    ),
+                    value
+                    ->ReCode.Decode.string
+                    ->Belt.Result.getWithDefault("")
+                    ->Js.String2.split("")
+                    ->Js.Array2.reverseInPlace
+                    ->Js.Array2.joinWith("")
+                    ->ReCode.Encode.string,
                   ),
                 )}>
               {"Reverse"->React.string}
@@ -136,7 +150,7 @@ module Form = {
               onBlur={_event => onBlur()}
               onChange={event => onChange(Controller.OnChangeArg.event(event))}
               ref
-              value
+              value={value->ReCode.Decode.string->Belt.Result.getWithDefault("")}
               type_="checkbox"
             />
           </div>
@@ -159,7 +173,8 @@ module Form = {
                       onBlur={_event => onBlur()}
                       onChange={event => onChange(Controller.OnChangeArg.event(event))}
                       ref
-                      value
+                      // Let's be unsafe here!
+                      value={Unsafe.valueToString(value)}
                     />
                     <ErrorMessage errors name message={"Required"->React.string} />
                     <button
