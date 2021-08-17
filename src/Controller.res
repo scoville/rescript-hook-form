@@ -1,10 +1,33 @@
+module OnChangeArg: {
+  @@ocaml.doc(
+    "This module is used to build event or value argument to pass down to the `onChange` callback."
+  )
+
+  type rec t
+
+  @ocaml.doc("Takes a `ReactEvent.Form.t` and return an `onChange` argument.
+Useful for dealing with native form inputs.")
+  let event: ReactEvent.Form.t => t
+
+  @ocaml.doc("Takes a `Js.Json.t` and return an `onChange` argument.
+This function allows you to set the input value to any arbitrary value.")
+  let value: Js.Json.t => t
+} = {
+  @unboxed
+  type rec t = Any('a): t
+
+  let event = eventHandler => Any(eventHandler)
+
+  let value = valueHandler => Any(valueHandler)
+}
+
 @ocaml.doc(
   "The `field` object described [here](https://react-hook-form.com/api/usecontroller/controller#main)."
 )
 type field = {
   name: string,
-  onBlur: ReactEvent.Focus.t => unit,
-  onChange: ReactEvent.Form.t => unit,
+  onBlur: unit => unit,
+  onChange: OnChangeArg.t => unit,
   ref: ReactDOM.domRef,
   // This is not correct, the value can be a bool or an int
   // The value should be considered opaque and never access directly
