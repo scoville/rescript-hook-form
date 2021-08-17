@@ -5,6 +5,8 @@ module OnChangeArg: {
 
   type rec t
 
+  type kind = Event(ReactEvent.Form.t) | Value(Js.Json.t)
+
   @ocaml.doc("Takes a `ReactEvent.Form.t` and return an `onChange` argument.
 Useful for dealing with native form inputs.")
   let event: ReactEvent.Form.t => t
@@ -12,13 +14,24 @@ Useful for dealing with native form inputs.")
   @ocaml.doc("Takes a `Js.Json.t` and return an `onChange` argument.
 This function allows you to set the input value to any arbitrary value.")
   let value: Js.Json.t => t
+
+  let classify: t => kind
 } = {
   @unboxed
   type rec t = Any('a): t
 
+  type kind = Event(ReactEvent.Form.t) | Value(Js.Json.t)
+
   let event = eventHandler => Any(eventHandler)
 
   let value = valueHandler => Any(valueHandler)
+
+  let classify = (Any(unknown)) =>
+    unknown->Js.typeof == "object" &&
+    unknown->Js.Nullable.return->Js.Nullable.isNullable->not &&
+    Obj.magic(unknown)["_reactName"] == "onChange"
+      ? Event(Obj.magic(unknown))
+      : Value(Obj.magic(unknown))
 }
 
 @ocaml.doc(
