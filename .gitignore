@@ -1,3 +1,4 @@
+.DS_Store
 *.exe
 *.obj
 *.out
@@ -19,8 +20,8 @@
 *.cmj
 *.bak
 lib
-example/**/*.js
-src/**/*.js
+example/**/*.mjs
+src/**/*.mjs
 *.mlast
 *.mliast
 .vscode
@@ -30,3 +31,5 @@ src/**/*.js
 yarn-error.log
 /.cache/
 /dist/
+/dist-ssr/
+*.local

@@ -14,10 +14,10 @@
     }
   ],
   "package-specs": {
-    "module": "commonjs",
+    "module": "es6-global",
     "in-source": true
   },
-  "suffix": ".js",
+  "suffix": ".mjs",
   "namespace": true,
   "bs-dependencies": ["@rescript/react"],
   "bs-dev-dependencies": ["re-code"],
