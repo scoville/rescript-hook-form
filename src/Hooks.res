@@ -42,6 +42,13 @@ module Form = {
   @ocaml.doc("Bindings for the [useForm](https://react-hook-form.com/api/useform) hook.")
   @module("react-hook-form")
   external use: (. ~config: config=?, unit) => t = "useForm"
+
+  @send external trigger: (t, string) => unit = "trigger"
+
+  @send external triggerMultiple: (t, array<string>) => unit = "trigger"
+
+  @send
+  external triggerAndFocus: (t, string, @as(json`{ shouldFocus: true }`) _) => unit = "trigger"
 }
 
 module ArrayField = {

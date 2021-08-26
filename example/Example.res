@@ -9,7 +9,7 @@ module Form = {
       reset,
       setFocus,
       setValue,
-    } = Hooks.Form.use(.
+    } as form = Hooks.Form.use(.
       ~config=Hooks.Form.config(
         ~mode=#onSubmit,
         ~defaultValues=Values.encoder({
@@ -209,6 +209,12 @@ module Form = {
         : React.null}
       <button type_="button" onClick={_event => append(. {"id": Uuid.v4(), "name": ""})}>
         {"Add hobby"->React.string}
+      </button>
+      <button type_="button" onClick={_event => form->Hooks.Form.trigger("email")}>
+        {"Validate email"->React.string}
+      </button>
+      <button type_="button" onClick={_event => form->Hooks.Form.triggerAndFocus("email")}>
+        {"Validate email and focus"->React.string}
       </button>
       <button
         type_="button" onClick={_event => setValue(. "firstName", ReCode.Encode.string("foo"))}>
