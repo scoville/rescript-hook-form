@@ -17,16 +17,16 @@ module Form = {
           "firstName": "",
           "lastName": "",
           "acceptTerms": false,
-          "hobbies": [{"id": Uuid.v4(), "name": ""}],
+          "hobbies": [{"name": ""}],
         }),
         (),
       ),
       (),
     )
 
-    let (hobbiesAreShown, setHobbiesAreShown) = React.useState(() => false)
+    let (hobbiesAreShown, setHobbiesAreShown) = React.useState(() => true)
 
-    let {fields, append, update} = Hooks.ArrayField.use(.
+    let {fields, append} = Hooks.ArrayField.use(.
       ~config=Hooks.ArrayField.config(~control, ~name="hobbies", ()),
       (),
     )
@@ -159,7 +159,7 @@ module Form = {
       {hobbiesAreShown
         ? fields
           ->Js.Array2.mapi((field, index) =>
-            <div key={field["id"]}>
+            <div key={index->Belt.Int.toString}>
               <Controller
                 name={Values.hobby(index)}
                 control
@@ -180,14 +180,13 @@ module Form = {
                     <button
                       type_="button"
                       onClick={_event =>
-                        update(.
-                          index,
-                          {
-                            "id": field["id"],
-                            "name": ["Game", "Food", "Sport", "Traveling", "Movie"][
-                              Js.Math.random_int(0, 5)
-                            ],
-                          },
+                        setValue(.
+                          Values.hobby(index),
+                          ReCode.Encode.string(
+                            ["Game", "Food", "Sport", "Traveling", "Movie"]->Js.Array2.unsafe_get(
+                              Js.Math.random_int(0, 5),
+                            ),
+                          ),
                         )}>
                       {"Update with random hobby"->React.string}
                     </button>
@@ -207,7 +206,7 @@ module Form = {
             }}
           </div>
         : React.null}
-      <button type_="button" onClick={_event => append(. {"id": Uuid.v4(), "name": ""})}>
+      <button type_="button" onClick={_event => append(. {"name": ""})}>
         {"Add hobby"->React.string}
       </button>
       <button type_="button" onClick={_event => form->Hooks.Form.trigger("email")}>

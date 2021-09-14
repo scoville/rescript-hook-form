@@ -1,8 +1,6 @@
 module Hobby = {
   type t = {name: string}
 
-  let id = "id"
-
   let name = "name"
 
   let make = name => {name: name}
@@ -17,7 +15,7 @@ module Hobby = {
   let encoder = hobby => {
     open ReCode.Encode
 
-    object([(id, string(hobby["id"])), (name, string(hobby["name"]))])
+    object([(name, string(hobby["name"]))])
   }
 }
 
