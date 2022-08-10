@@ -52,13 +52,17 @@ module Form = {
             (
               "validEmail",
               Validation.sync(value =>
-                value->ReCode.Decode.string->Belt.Result.getWithDefault("")->String.contains('@')
+                ValidationResult.boolResult(
+                  value->ReCode.Decode.string->Belt.Result.getWithDefault("")->String.contains('@'),
+                )
               ),
             ),
             (
               "validLength",
               Validation.sync(value =>
-                value->ReCode.Decode.string->Belt.Result.getWithDefault("")->String.length >= 8
+                ValidationResult.boolResult(
+                  value->ReCode.Decode.string->Belt.Result.getWithDefault("")->String.length >= 8,
+                )
               ),
             ),
           ]),
