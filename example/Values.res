@@ -23,6 +23,7 @@ type t = {
   email: string,
   firstName: string,
   lastName: string,
+  location: string,
   acceptTerms: bool,
   hobbies: array<Hobby.t>,
 }
@@ -30,14 +31,16 @@ type t = {
 let email = "email"
 let firstName = "firstName"
 let lastName = "lastName"
+let location = "location"
 let acceptTerms = "acceptTerms"
 let hobbies = "hobbies"
 let hobby = index => `${hobbies}.${index->Belt.Int.toString}.${Hobby.name}`
 
-let make = (email, firstName, lastName, acceptTerms, hobbies) => {
+let make = (email, firstName, lastName, acceptTerms, hobbies, location) => {
   email: email,
   firstName: firstName,
   lastName: lastName,
+  location: location,
   acceptTerms: acceptTerms,
   hobbies: hobbies,
 }
@@ -52,6 +55,7 @@ let decoder = {
   ->Object.required(lastName, string)
   ->Object.required(acceptTerms, bool)
   ->Object.required(hobbies, array(Hobby.decoder))
+  ->Object.required(location, string)
 }
 
 let encoder = values => {
@@ -61,6 +65,7 @@ let encoder = values => {
     (email, string(values["email"])),
     (firstName, string(values["firstName"])),
     (lastName, string(values["lastName"])),
+    (location, string(values["location"])),
     (acceptTerms, bool(values["acceptTerms"])),
     (hobbies, array(Hobby.encoder, values["hobbies"])),
   ])

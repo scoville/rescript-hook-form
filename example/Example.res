@@ -18,6 +18,7 @@ module Form = {
           "lastName": "",
           "acceptTerms": false,
           "hobbies": [{"name": ""}],
+          "location": "",
         }),
         (),
       ),
@@ -140,6 +141,30 @@ module Form = {
                 )}>
               {"Reverse"->React.string}
             </button>
+            <ErrorMessage errors name message={"Required"->React.string} />
+          </div>}
+      />
+      <Controller
+        name=Values.location
+        control
+        rules={Rules.make(
+          ~required=true,
+          ~validate=Js.Dict.fromArray([
+            ("minThreeChars", Validations.minThreeChars),
+            ("maxTenChars", Validations.maxTenChars),
+          ]),
+          (),
+        )}
+        render={({field: {name, onBlur, onChange, ref, value}}) =>
+          <div>
+            <label> {name->React.string} </label>
+            <input
+              name
+              onBlur={_event => onBlur()}
+              onChange={event => onChange(Controller.OnChangeArg.event(event))}
+              ref
+              value={value->ReCode.Decode.string->Belt.Result.getWithDefault("")}
+            />
             <ErrorMessage errors name message={"Required"->React.string} />
           </div>}
       />
